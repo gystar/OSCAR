@@ -2,3 +2,7 @@
 .venv
 *.pyc
 *.egg/*
+data
+data-bin
+data-raw
+checkpoint

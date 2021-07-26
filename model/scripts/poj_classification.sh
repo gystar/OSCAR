@@ -32,4 +32,4 @@ python train.py $FP16 \
     --max-update $TOTAL_UPDATES --log-format simple --log-interval 100 \
     --find-unused-parameters $STATE $POOLING \
     --skip-invalid-size-inputs-valid-test --no-epoch-checkpoints --no-save \
-    --save-dir $SAVE_DIR --restore-file $CHECKPOINT
+    --save-dir $SAVE_DIR #--restore-file $CHECKPOINT
