@@ -6,3 +6,4 @@ data
 data-bin
 data-raw
 checkpoint
+*.so
