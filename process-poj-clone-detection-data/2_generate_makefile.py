@@ -15,7 +15,7 @@ for f in os.listdir(in_dir):
             #if index in uncompilable:
             #    continue
             out_filename = os.path.join(out_dir, index + '.ll')
-            cmd = 'clang-11 -O0 -S -emit-llvm "%s" -o "%s" -std=c++98 -Wno-everything\n' % (in_filename, out_filename)
+            cmd = 'clang -O0 -S -emit-llvm "%s" -o "%s" -std=c++98 -Wno-everything\n' % (in_filename, out_filename)
             out_filenames.append(out_filename)
             makefile += '%s: %s\n\t%s' % (out_filename, in_filename, cmd)
 

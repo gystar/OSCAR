@@ -18,7 +18,7 @@ for f in os.listdir(in_dir):
             except:
                 pass
             out_filename = os.path.join(out_dir, c, i + '.ll')
-            cmd = 'clang-11 -O0 -S -emit-llvm "%s" -o "%s" -std=c++98 -Wno-everything\n' % (in_filename, out_filename)
+            cmd = 'clang -O0 -S -emit-llvm "%s" -o "%s" -std=c++98 -Wno-everything\n' % (in_filename, out_filename)
             out_filenames.append(out_filename)
             makefile += '%s: %s\n\t%s' % (out_filename, in_filename, cmd)
 

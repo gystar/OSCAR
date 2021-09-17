@@ -1,15 +1,19 @@
 #!/bin/bash
 input_dir=../data-raw/poj-clone-detection/ProgramData
-output_dir=./out
+output_dir=../data-bin/poj-classification
 moco_path=../data-bin/pretrain
 max_len=511
 process=24
+llvm_path=/mnt/wanyao/guiyi/opt/llvm-10.0/bin
+export PATH=$llvm_path:${PATH}
 mkdir -p $output_dir/source/train $output_dir/source/valid $output_dir/source/test \
     $output_dir/ir/train $output_dir/ir/valid $output_dir/ir/test \
     $output_dir/json/train $output_dir/json/valid $output_dir/json/test \
     $output_dir/concat_json/train $output_dir/concat_json/valid $output_dir/concat_json/test \
     $output_dir/rawtext/train $output_dir/rawtext/valid $output_dir/rawtext/test \
     $output_dir/result/train $output_dir/result/valid $output_dir/result/test
+
+
 python 1_process_source_code.py $input_dir $output_dir/source 104
 python 2_generate_makefile.py $output_dir/source/train $output_dir/ir/train $output_dir/Makefile.train
 python 2_generate_makefile.py $output_dir/source/valid $output_dir/ir/valid $output_dir/Makefile.valid
@@ -17,6 +21,7 @@ python 2_generate_makefile.py $output_dir/source/test $output_dir/ir/test $outpu
 make -j$process -k -f $output_dir/Makefile.train
 make -j$process -k -f $output_dir/Makefile.valid
 make -j$process -k -f $output_dir/Makefile.test
+
 python 3_ir_to_json.py $output_dir/ir/train $output_dir/json/train/ 104 $process $max_len
 python 3_ir_to_json.py $output_dir/ir/valid $output_dir/json/valid/ 104 $process $max_len
 python 3_ir_to_json.py $output_dir/ir/test $output_dir/json/test/ 104 $process $max_len
