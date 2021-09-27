@@ -1,6 +1,6 @@
 in_dir=../data-raw/bindiff/gnutls-3.5.19/
 in_file=libgnutls.so
-out_dir=./data/gnutls
+out_dir=./data-bin/gnutls
 max_len=511
 
 mkdir -p $out_dir $out_dir/stripped $out_dir/ir $out_dir/json $out_dir/train_json $out_dir/result
