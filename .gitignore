@@ -7,3 +7,4 @@ data-bin
 data-raw
 checkpoint
 *.so
+outputs

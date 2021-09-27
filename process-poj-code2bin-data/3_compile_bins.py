@@ -5,6 +5,7 @@ from pathlib import Path
 import logging
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
+logger = utils.setup_logger("bin2ir", "outputs/bin2ir.log")
 
 logging.basicConfig(
     level=logging.DEBUG,  # 控制台打印的日志级别
@@ -16,24 +17,25 @@ logging.basicConfig(
 )
 SRC_DIR = Path("data-raw/poj-binary_code-clone/ProgramData")
 
-GCC_PATH = "/usr/bin/gcc"
-# gcc -O0 -s -m32 31.c -o 31.a
-GCC_ARM_32_PATH = "/usr/bin/arm-linux-gnueabihf-gcc"
-# arm-linux-gnueabihf-gcc -O0 -s 31.c -o 31.a
-GCC_ARM_64_PATH = "/usr/bin/aarch64-linux-gnu-gcc"
-# aarch64-linux-gnu-gcc -O0 -s 31.c -o 31.a
+GCC_PATH = "/usr/bin/g++"
+# g++ -O0 -s -m32 31.c -o 31.a
+GCC_ARM_32_PATH = "/usr/bin/arm-linux-gnueabihf-g++"
+# arm-linux-gnueabihf-g++ -O0 -s 31.c -o 31.a
+GCC_ARM_64_PATH = "/usr/bin/aarch64-linux-gnu-g++"
+# aarch64-linux-gnu-g++ -O0 -s 31.c -o 31.a
 
-CLANG_PATH = "/mnt/wanyao/guiyi/opt/llvm-6.0/bin/clang"
-# clang -O0 -s -m32 -target armv7-unknown-linux-gnu 31.c -o 31.a
+CLANG_PATH = "/mnt/wanyao/guiyi/opt/llvm-6.0/bin/clang++"
+# clang++ -O0 -s -m32 -target armv7-unknown-linux-gnu 31.c -o 31.a
 ARC_CMDS = [
-    [GCC_PATH, "-s", "-m32"],  # gcc-x86-32
-    [GCC_PATH, "-s", "-m64"],  # gcc-x86-64
-    [GCC_ARM_32_PATH, "-s"],  # gcc-arm-32
-    [GCC_ARM_64_PATH, "-s"],  # gcc-arm-64
-    [CLANG_PATH, "-s", "-m32", "-target"],  # clang-x86-32
-    [CLANG_PATH, "-s", "-m64", "-target"],  # clang-x86-64
-    [CLANG_PATH, "-s", "-m32", "-target", "armv7-unknown-linux-gnu"],  # clang-arm-32
-    [CLANG_PATH, "-s", "-m64", "-target", "armv7-unknown-linux-gnu"],  # clang-arm-64
+    [GCC_PATH, "-s", "-m32", "-xc++", "-std=c++11"],  # gcc-x86-32
+    [GCC_PATH, "-s", "-m64", "-xc++", "-std=c++11"],  # gcc-x86-64
+    [GCC_ARM_32_PATH, "-s", "-xc++", "-std=c++11"],  # gcc-arm-32
+    [GCC_ARM_64_PATH, "-s", "-xc++", "-std=c++11"],  # gcc-arm-64
+    [CLANG_PATH, "-s", "-m32", "-xc++", "-std=c++11"],  # clang-x86-32
+    [CLANG_PATH, "-s", "-m64", "-xc++", "-std=c++11"],  # clang-x86-64
+    #arm-linux-gnueabi/bin/ld: cannot find -lstdc++
+    #[CLANG_PATH, "-s", "-m32", "-target", "arm-unknown-linux-gnu", "-xc++", "-std=c++11"],  # clang-arm-32
+    [CLANG_PATH, "-s", "-m64", "-target", "arm-unknown-linux-gnu", "-xc++", "-std=c++11", "-I/usr/include/x86_64-linux-gnu/c++/7"],  # clang-arm-64
 ]
 ARC_NAMES = [
     "gcc-x86-32",
@@ -42,7 +44,7 @@ ARC_NAMES = [
     "gcc-arm-64",
     "clang-x86-32",
     "clang-x86-64",
-    "clang-arm-32",
+    #"clang-arm-32",
     "clang-arm-64",
 ]
 
@@ -53,18 +55,24 @@ TIME_OUT_OPTIONS = ["timeout", "-s9", str(TIMEOUT)]
 SRC_DIR = Path("data-raw/poj-binary_code-clone/ProgramData")
 DST_DIR = Path("data-raw/poj-binary_code-clone/bins")
 
+
 def cmds():
-    for question in os.listdir(SRC_DIR): 
+    for question in os.listdir(SRC_DIR):
         for solution in os.listdir(SRC_DIR / question):
             full_path = SRC_DIR / f"{question}/{solution}"
-            for i, optimition in enumerate(OPTIMITIONS):
-                dst_file_dir = DST_DIR / f"{ARC_NAMES[i]}/{question}"
-                dst_file_dir.mkdir(parents=True, exist_ok=True)                
-                dst_file_path = dst_file_dir / f"{solution}.a"
-                #print(f"processing {full_path}")
-                cmd = TIME_OUT_OPTIONS+ARC_CMDS[i]+[str(full_path), "-o", str(dst_file_path)] 
-                print(cmd)
-                yield cmd
-            
-utils.run_cmds_parallel(cmds())
+            for i, arc_cmd in enumerate(ARC_CMDS):
+                for optimition in OPTIMITIONS:
+                    dst_file_dir = DST_DIR / f"{ARC_NAMES[i]}/{optimition}/{question}"
+                    dst_file_dir.mkdir(parents=True, exist_ok=True)
+                    dst_file_path = dst_file_dir / f"{solution}.a"
+                    # print(f"processing {full_path}")
+                    cmd = (
+                        TIME_OUT_OPTIONS
+                        + arc_cmd
+                        + [str(full_path), "-o", str(dst_file_path)]
+                    )
+                    print(cmd)
+                    yield cmd
 
+
+utils.run_cmds_parallel(cmds(), logger)

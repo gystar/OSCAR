@@ -4,7 +4,6 @@ import os,sys
 from pathlib import Path
 import logging
 
-xc
 current_dir = os.path.dirname(os.path.realpath(__file__))
 
 TIMEOUT = 60
