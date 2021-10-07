@@ -1,3 +1,6 @@
+export PATH=/mnt/guiyi/opt/go/bin:$PATH
+export GOPROXY=https://goproxy.io
+export GO111MODULE=on
 all: libanalysis.so irlexer fast
 libanalysis.so:
 	cd ../analyzer && mkdir -p build && cd build && cmake .. && make && cp libanalysis.so ../../bin

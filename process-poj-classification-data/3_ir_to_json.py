@@ -5,7 +5,7 @@ import json
 from multiprocessing import Pool
 
 def process(in_file, inst_file, state_file, pos_file, max_len):
-    cmd = 'opt-11 -load ../bin/libanalysis.so'.split()
+    cmd = 'opt-10 -load ../bin/libanalysis.so'.split()
     cmd += '-staticanalysis -max-len'.split()
     cmd += [max_len, '-truncate', '-concat-func']
     cmd += ['-inst-out', inst_file]

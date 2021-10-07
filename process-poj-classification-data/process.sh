@@ -4,7 +4,7 @@ output_dir=../data-bin/poj-classification
 moco_path=../data-bin/pretrain
 max_len=511
 process=24
-llvm_path=/mnt/wanyao/guiyi/opt/llvm-10.0/bin
+llvm_path=/mnt/guiyi/opt/llvm-10.0/bin
 export PATH=$llvm_path:${PATH}
 mkdir -p $output_dir/source/train $output_dir/source/valid $output_dir/source/test \
     $output_dir/ir/train $output_dir/ir/valid $output_dir/ir/test \
@@ -38,4 +38,4 @@ cp $output_dir/concat_json/valid/label.txt $output_dir/result/valid
 cp $output_dir/rawtext/test/* $output_dir/result/test
 cp $output_dir/concat_json/test/label.txt $output_dir/result/test
 cd ../model
-./scripts/classification_preprocess.sh ../process-poj-classification-data/out/result ../data-bin/poj-classification $moco_path
+./scripts/classification_preprocess.sh $output_dir/result ../data-bin/poj-classification $moco_path
