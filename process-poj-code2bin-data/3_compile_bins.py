@@ -5,7 +5,7 @@ from pathlib import Path
 import logging
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
-logger = utils.setup_logger("bin2ir", "outputs/bin2ir.log")
+logger = utils.setup_logger("bin2ir", "outputs/ir2bins.log")
 
 logging.basicConfig(
     level=logging.DEBUG,  # 控制台打印的日志级别
@@ -24,7 +24,7 @@ GCC_ARM_32_PATH = "/usr/bin/arm-linux-gnueabihf-g++"
 GCC_ARM_64_PATH = "/usr/bin/aarch64-linux-gnu-g++"
 # aarch64-linux-gnu-g++ -O0 -s 31.c -o 31.a
 
-CLANG_PATH = "/mnt/wanyao/guiyi/opt/llvm-6.0/bin/clang++"
+CLANG_PATH = "/home/wanyao/guiyi/opt/llvm-6.0/bin/clang++"
 # clang++ -O0 -s -m32 -target armv7-unknown-linux-gnu 31.c -o 31.a
 ARC_CMDS = [
     [GCC_PATH, "-s", "-m32", "-xc++", "-std=c++11"],  # gcc-x86-32
@@ -71,7 +71,7 @@ def cmds():
                     cmd = (
                         TIME_OUT_OPTIONS
                         + arc_cmd
-                        + [str(full_path), "-o", str(dst_file_path)]
+                        + [optimition, str(full_path), "-o", str(dst_file_path)]
                     )
                     print(cmd)
                     yield cmd
@@ -79,4 +79,4 @@ def cmds():
 
 utils.run_cmds_parallel(cmds(), logger)
 
-22080e1b-0258-4ee1-9fe0-8cb73ef75f33
+
