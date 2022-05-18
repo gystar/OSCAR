@@ -65,6 +65,8 @@ def cmds():
                     dst_file_dir = DST_DIR / f"{ARC_NAMES[i]}/{optimition}/{question}"
                     dst_file_dir.mkdir(parents=True, exist_ok=True)
                     dst_file_path = dst_file_dir / f"{solution}.a"
+                    if dst_file_path.exists():
+                        continue
                     # print(f"processing {full_path}")
                     cmd = (
                         TIME_OUT_OPTIONS
@@ -76,3 +78,5 @@ def cmds():
 
 
 utils.run_cmds_parallel(cmds(), logger)
+
+22080e1b-0258-4ee1-9fe0-8cb73ef75f33
