@@ -50,7 +50,7 @@ class IRPredictionTask(FairseqTask):
                             will be iterated upon during epochs in round-robin manner')
         parser.add_argument('--function-length', default=255, type=int)
         #parser.add_argument('--max-functions-per-program', default=4, type=int)
-        parser.add_argument('--num-classes', type=int)
+        parser.add_argument('--threshold', type=float)
         parser.add_argument('--no-state', action='store_true')
 
     def __init__(self, args, instruction_dictionary, state_dictionary):

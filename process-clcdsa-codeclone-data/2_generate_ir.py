@@ -12,8 +12,8 @@ cmd_func = lambda x, y: ["timeout", "-s9", str(TIMEOUT)]+[CLANG_PATH] + \
     f"-emit-llvm -S -xc++ -std=c++11 -Wno-everything".split(" ")+[x,"-o", y]
 
 
-SRC_DIR = Path("data-raw/poj-binary_code-clone/ProgramData")
-DST_DIR = Path("data-raw/poj-binary_code-clone/irs")
+SRC_DIR = Path("data-raw/clcdsa_clone/preprocessed")
+DST_DIR = Path("data-raw/clcdsa_clone/irs")
 
 def cmds():
     for question in os.listdir(SRC_DIR):

@@ -2,7 +2,7 @@ import os,sys
 from pathlib import Path
 import numpy as np
 
-bc_dir=Path("data-raw/cross-language-clone/bc/AtCoder_splits")
+bc_dir=Path("data-raw/clcdsa/bc/AtCoder_splits")
 spilts=["train","val", "test"]
 languages=["c","cpp","java"]
 stats = np.zeros((len(spilts), len(languages)))

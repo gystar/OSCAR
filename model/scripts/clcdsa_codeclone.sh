@@ -1,7 +1,7 @@
 #!/bin/bash
 CHECKPOINT=$1
-DATA_DIR=../data-bin/poj-classification
-SAVE_DIR=../checkpoint/poj-classification
+DATA_DIR=../data-bin/clcdsa-codeclone
+SAVE_DIR=../checkpoint/clcdsa-codeclone
 TOTAL_UPDATES=10000
 WARMUP_UPDATES=1000
 PEAK_LR=0.00005
@@ -17,7 +17,7 @@ STATE=
 POOLING=
 python setup.py build_ext --inplace
 python train.py $FP16 \
-    --encoder-normalize-before $DATA_DIR --num-workers 0 --num-classes 104 \
+    --encoder-normalize-before $DATA_DIR --num-workers 0 --threshold 0.8\
     --moco-queue-length 65536 --moco-projection-dim 256 --moco-temperature 0.05 --moco-momentum 0.999 --ddp-backend=c10d \
     --task ir_prediction --criterion ir_prediction --arch irbert_base \
     --function-length $MAX_POSITIONS \

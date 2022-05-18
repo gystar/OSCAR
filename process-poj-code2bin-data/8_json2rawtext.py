@@ -1,18 +1,16 @@
-import os
 import sys
+import os
 import subprocess
 import json
 import shutil
-from pathlib import Path
 
-json_dir = sys.argv[1]
-out_dir = sys.argv[2]
-moco_path = sys.argv[3]
-max_len = sys.argv[4]
-
-Path(out_dir).mkdir(parents=True, exist_ok=True)
-inst_dict_file = os.path.join(moco_path, 'inst_dict.txt')
-state_dict_file = os.path.join(moco_path, 'state_dict.txt')
+in_dir = sys.argv[1]
+program = sys.argv[2]
+variants = sys.argv[3].split(',')
+out_dir = sys.argv[4]
+inst_dict_file = sys.argv[5]
+state_dict_file = sys.argv[6]
+max_len = sys.argv[7]
 
 state_dict = {}
 for line in open(state_dict_file):
@@ -22,7 +20,7 @@ for line in open(state_dict_file):
         state_dict[token] = int(freq)
 
 def process_inst(in_file, out_file, dict_file):
-    cmd = ['../bin/irlexer', 'process-inst', in_file, dict_file, dict_file, '../bin/fast', os.path.join(moco_path, 'bpe_codes'), max_len]
+    cmd = ['../bin/irlexer', 'process-inst', in_file, dict_file, dict_file, '../bin/fast', '../data-bin/pretrain/bpe_codes', max_len]
     subprocess.run(cmd, stdout=open(out_file, 'w'), stderr=subprocess.STDOUT)
 
 def to_rawtext(in_file, out_file, vocab=None):
@@ -47,7 +45,12 @@ def to_rawtext(in_file, out_file, vocab=None):
                             tokens.append('<const>')
             fo.write(' '.join(tokens) + '\n')
 
-process_inst(os.path.join(json_dir, 'insts.json'), os.path.join(out_dir, 'insts.json'), inst_dict_file)
-to_rawtext(os.path.join(out_dir, 'insts.json'), os.path.join(out_dir, 'insts.txt'))
-to_rawtext(os.path.join(json_dir, 'states.json'), os.path.join(out_dir, 'states.txt'), state_dict)
-shutil.copyfile(os.path.join(json_dir, 'pos.json'), os.path.join(out_dir, 'pos.json'))
+for v in variants:
+    try:
+        os.mkdir(os.path.join(out_dir, v))
+    except:
+        pass
+    process_inst(os.path.join(in_dir, v, 'insts.json'), os.path.join(out_dir, v, 'insts.json'), inst_dict_file)
+    to_rawtext(os.path.join(out_dir, v, 'insts.json'), os.path.join(out_dir, v, 'insts.txt'))
+    to_rawtext(os.path.join(in_dir, v, 'states.json'), os.path.join(out_dir, v, 'states.txt'), state_dict)
+    shutil.copyfile(os.path.join(in_dir, v, 'pos.json'), os.path.join(out_dir, v, 'pos.json'))
