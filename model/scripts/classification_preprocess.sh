@@ -1,7 +1,7 @@
 #!/bin/bash
-data_dir=../data-raw/poj-classification
-bin_dir=../data-bin/poj-classification
-moco_path=../data-bin/pretrain
+data_dir=$1
+bin_dir=$2
+moco_path=$3
 mkdir -p $bin_dir/ $bin_dir/states $bin_dir/states $bin_dir/pos $bin_dir/label
 python3 preprocess.py --srcdict $moco_path/inst_dict.txt --only-source --trainpref $data_dir/train/insts.txt --validpref $data_dir/valid/insts.txt --destdir $bin_dir/insts --dataset-impl mmap --workers 60
 python3 preprocess.py --srcdict $moco_path/state_dict.txt --only-source --trainpref $data_dir/train/states.txt --validpref $data_dir/valid/states.txt --destdir $bin_dir/states --dataset-impl mmap --workers 60

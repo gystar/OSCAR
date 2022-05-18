@@ -135,7 +135,7 @@ def main(args):
                 offset=0, end=offsets[1]
             )
         )
-        if num_workers > 1:----
+        if num_workers > 1:
             pool.join()
             for worker_id in range(1, num_workers):
                 prefix = "{}{}".format(output_prefix, worker_id)

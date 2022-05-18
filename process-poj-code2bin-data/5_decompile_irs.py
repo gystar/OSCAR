@@ -3,9 +3,9 @@ import utils
 import os,sys
 
 
-logger = utils.setup_logger("bin2ir", "outputs/bin2ir.log")
+logger = utils.setup_logger("bin2ir", "outputs/bins2ir.log")
 # python /mnt/wanyao/guiyi/opt/retdec_4.0/bin/retdec-decompiler.py --keep-unreachable-funcs --stop-after bin2llvmir -o 31.ll 31.a
-DECOMPILER_PATH = "/mnt/wanyao/guiyi/opt/retdec_4.0/bin/retdec-decompiler.py"
+DECOMPILER_PATH = "/mnt/guiyi/opt/retdec_4.0/bin/retdec-decompiler.py"
 cmd_func = lambda x, y: [
     "python",
     DECOMPILER_PATH,
